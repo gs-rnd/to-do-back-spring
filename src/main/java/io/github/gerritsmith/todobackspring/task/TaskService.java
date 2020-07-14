@@ -16,6 +16,10 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
+    public Task getTaskById(long id) {
+        return taskRepository.findById(id);
+    }
+
     @Transactional
     public Task addTask(Task task) {
         return taskRepository.save(task);
