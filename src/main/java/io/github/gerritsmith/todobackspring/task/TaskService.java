@@ -25,4 +25,9 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    @Transactional
+    public Task updateTask(Task task) {
+        return taskRepository.save(task);
+    }
+
 }
