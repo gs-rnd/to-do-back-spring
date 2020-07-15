@@ -22,12 +22,19 @@ public class TaskService {
 
     @Transactional
     public Task addTask(Task task) {
+        removeWhiteSpace(task);
         return taskRepository.save(task);
     }
 
     @Transactional
     public Task updateTask(Task task) {
+        removeWhiteSpace(task);
         return taskRepository.save(task);
+    }
+
+    private void removeWhiteSpace(Task task) {
+        task.setTitle(task.getTitle().trim());
+        task.setDescription(task.getDescription().trim());
     }
 
 }
