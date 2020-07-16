@@ -28,4 +28,13 @@ public class TaskController {
         return taskService.addTask(task);
     }
 
+    @PutMapping("/tasks/{id}")
+    public Task updateTask(@PathVariable Long id,
+                           @RequestBody @Valid Task task) {
+        if (task.getId().equals(id)) {
+            return taskService.updateTask(task);
+        }
+        return null;
+    }
+
 }
