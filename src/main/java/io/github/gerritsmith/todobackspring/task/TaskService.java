@@ -32,6 +32,11 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    @Transactional
+    public void deleteTask(long id) {
+        taskRepository.deleteById(id);
+    }
+
     private void removeWhiteSpace(Task task) {
         task.setTitle(task.getTitle().trim());
         task.setDescription(task.getDescription().trim());
