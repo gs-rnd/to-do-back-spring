@@ -1,4 +1,4 @@
-package io.github.gerritsmith.todobackspring.user;
+package io.github.gerritsmith.todobackspring.user.role;
 
 import javax.persistence.*;
 

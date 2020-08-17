@@ -2,6 +2,13 @@ package io.github.gerritsmith.todobackspring.user;
 
 import io.github.gerritsmith.todobackspring.security.JwtUtilities;
 import io.github.gerritsmith.todobackspring.security.UserDetailsImplementation;
+import io.github.gerritsmith.todobackspring.user.api.JwtResponse;
+import io.github.gerritsmith.todobackspring.user.api.LoginRequest;
+import io.github.gerritsmith.todobackspring.user.api.MessageResponse;
+import io.github.gerritsmith.todobackspring.user.api.RegisterRequest;
+import io.github.gerritsmith.todobackspring.user.role.Role;
+import io.github.gerritsmith.todobackspring.user.role.RoleRepository;
+import io.github.gerritsmith.todobackspring.user.role.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

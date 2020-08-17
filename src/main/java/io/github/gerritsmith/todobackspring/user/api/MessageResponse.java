@@ -1,4 +1,4 @@
-package io.github.gerritsmith.todobackspring.user;
+package io.github.gerritsmith.todobackspring.user.api;
 
 public class MessageResponse {
 

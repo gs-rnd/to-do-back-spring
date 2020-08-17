@@ -1,5 +1,7 @@
 package io.github.gerritsmith.todobackspring.user;
 
+import io.github.gerritsmith.todobackspring.user.role.Role;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
