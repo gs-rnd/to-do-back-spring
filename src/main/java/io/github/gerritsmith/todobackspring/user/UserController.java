@@ -2,13 +2,8 @@ package io.github.gerritsmith.todobackspring.user;
 
 import io.github.gerritsmith.todobackspring.security.JwtUtilities;
 import io.github.gerritsmith.todobackspring.security.UserDetailsImplementation;
-import io.github.gerritsmith.todobackspring.user.api.JwtResponse;
-import io.github.gerritsmith.todobackspring.user.api.LoginRequest;
-import io.github.gerritsmith.todobackspring.user.api.MessageResponse;
-import io.github.gerritsmith.todobackspring.user.api.RegisterRequest;
-import io.github.gerritsmith.todobackspring.user.role.Role;
-import io.github.gerritsmith.todobackspring.user.role.RoleRepository;
-import io.github.gerritsmith.todobackspring.user.role.RoleType;
+import io.github.gerritsmith.todobackspring.shared.FormatErrorResponse;
+import io.github.gerritsmith.todobackspring.user.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,12 +12,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @CrossOrigin("http://localhost:4200")
@@ -31,10 +25,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
+    private UserService userService;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -64,24 +55,22 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            return ResponseEntity.badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest,
+                                          Errors errors) {
+        if (userService.usernameExists(registerRequest.getUsername())) {
+            errors.rejectValue("username", "Exists", "username already exists");
         }
-        if (userRepository.existsByEmail(registerRequest.getEmail())) {
+        if (userService.emailExists(registerRequest.getEmail())) {
+            errors.rejectValue("email", "Exists", "email already registered");
+        }
+        if (errors.hasErrors()) {
             return ResponseEntity.badRequest()
-                    .body(new MessageResponse("Error: Email is already registered!"));
+                    .body(FormatErrorResponse.springErrorsToApiResponse(errors));
         }
         User user = new User(registerRequest.getUsername(),
                              registerRequest.getEmail(),
                              encoder.encode(registerRequest.getPassword()));
-        Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        roles.add(userRole);
-        user.setRoles(roles);
-        userRepository.save(user);
+        userService.add(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
