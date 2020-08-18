@@ -20,7 +20,7 @@ public class RegisterRequest {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.username = username.trim();
     }
 
     public String getEmail() {
@@ -28,7 +28,7 @@ public class RegisterRequest {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.trim();
     }
 
     public String getPassword() {
@@ -36,7 +36,7 @@ public class RegisterRequest {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password.trim();
     }
 
 }
